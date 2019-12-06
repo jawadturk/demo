@@ -36,7 +36,7 @@ public class MainService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<String> response = restTemplate.exchange("http://api.worldbank.org/v2/country?format=json", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange("http://api.worldbank.org/v2/country?format=json&per_page=304", HttpMethod.GET, entity, String.class);
 
         JsonParser parser = new JsonParser();
         JsonElement tradeElement = parser.parse(response.getBody());
@@ -51,7 +51,7 @@ public class MainService {
             e.printStackTrace();
         }
 
-        System.out.println(trade.toString());
+
         Country matchingObject = countries.stream().
                 filter(c -> c.getIso2Code().equalsIgnoreCase(countryCode)).
                 findAny().orElse(null);
@@ -67,7 +67,6 @@ public class MainService {
                        .filter(country -> country.getIso2Code().equalsIgnoreCase(countryCode))
                        .collect(Collectors.toList());
            }
-
          return  new BaseResponse(SUCCESS_STATUS, CODE_SUCCESS, result);
     }
 }
